@@ -44,6 +44,11 @@ This repository contains comprehensive learning materials for Generative AI (Gen
 - **Coverage**: Deploying and managing AI microservices efficiently
 - **Key Topics**: MCP architecture, server implementation, client integration, deployment strategies, performance optimization
 
+### 9. **Prompt Engineering Comprehensive Guide**
+- **File**: `prompt_engineering_comprehensive_guide.md`
+- **Coverage**: Mastering the art of AI communication and prompt optimization
+- **Key Topics**: Prompt design principles, advanced techniques (chain-of-thought, self-consistency), domain-specific strategies, production optimization, security considerations
+
 ## 🎯 Learning Objectives
 
 Each document is designed to provide:
@@ -75,9 +80,10 @@ Each learning document follows a consistent structure:
 
 2. **Navigate to specific topics**:
    - Start with `llm_generative_ai_fundamentals.md` for basics
-   - Move to `ai_agents_agentic_workflows.md` for agent concepts
-   - Explore `development_tools_and_technologies.md` for practical tools
-   - Study `mcp_model_context_protocol_servers.md` for advanced microservices
+   - Move to `prompt_engineering_comprehensive_guide.md` for AI communication mastery
+   - Explore `ai_agents_agentic_workflows.md` for agent concepts
+   - Study `development_tools_and_technologies.md` for practical tools
+   - Advance to `mcp_model_context_protocol_servers.md` for microservices
 
 3. **Practice with examples**:
    - Each document contains practical code examples
@@ -88,6 +94,7 @@ Each learning document follows a consistent structure:
 
 ### **Beginner Level**:
 - Start with LLM fundamentals and basic concepts
+- Master prompt engineering fundamentals
 - Understand vector databases and embeddings
 - Learn basic LangChain implementations
 
@@ -95,11 +102,13 @@ Each learning document follows a consistent structure:
 - Deep dive into RAG systems and architectures
 - Master AI agents and agentic workflows
 - Implement chat applications with advanced features
+- Apply advanced prompt engineering techniques
 
 ### **Advanced Level**:
 - Explore MCP servers and microservices
 - Master Cypher query context retrieval
 - Understand production deployment and scaling
+- Optimize prompts for production systems
 
 ## 📝 Contributing
 
