@@ -74,61 +74,381 @@
 
 ## RAG Architecture Patterns
 
-### **1. Basic RAG**
+*The following section presents 8 distinct RAG architectures, each designed for specific use cases and complexity levels. These architectures provide a comprehensive framework for understanding how RAG systems can be structured to meet different requirements.*
+
+### **1. Naive RAG (Basic RAG)**
+
+#### **Architecture Overview**:
+The simplest RAG implementation that follows a straightforward retrieve-then-generate pattern.
 
 #### **Flow**:
 1. **User Query**: Receive user question or request
-2. **Query Processing**: Preprocess and embed the query
-3. **Retrieval**: Find relevant documents from knowledge base
-4. **Context Assembly**: Combine query with retrieved documents
-5. **Generation**: Generate response using LLM
+2. **Embedding**: Convert query to vector representation using embedding model
+3. **Retrieval**: Find relevant documents from vector database using similarity search
+4. **Context Assembly**: Combine query with retrieved documents in prompt template
+5. **Generation**: Generate response using LLM with assembled context
 6. **Response**: Return answer with source attribution
+
+#### **Key Components**:
+- **Single Embedding Model**: One model for query and document encoding
+- **Vector Database**: Simple similarity search (e.g., cosine similarity)
+- **Prompt Template**: Basic template combining query and retrieved context
+- **LLM**: Single language model for response generation
 
 #### **Use Cases**:
 - **Question Answering**: Answer questions from document collections
 - **Document Summarization**: Summarize based on retrieved context
 - **Information Retrieval**: Find and present relevant information
+- **Simple Chatbots**: Basic conversational interfaces
 
-### **2. Multi-Step RAG**
+#### **Advantages**:
+- Simple to implement and understand
+- Fast processing with minimal latency
+- Good baseline performance
+- Easy to debug and maintain
 
-#### **Flow**:
-1. **Initial Retrieval**: Get initial set of relevant documents
-2. **Query Refinement**: Generate follow-up queries based on initial results
-3. **Additional Retrieval**: Retrieve more specific information
-4. **Synthesis**: Combine information from multiple retrieval steps
-5. **Generation**: Generate comprehensive response
+#### **Limitations**:
+- Limited context understanding
+- No query refinement capabilities
+- Single retrieval step may miss relevant information
+- Basic relevance ranking
 
-#### **Use Cases**:
-- **Complex Research**: Multi-faceted information gathering
-- **Comparative Analysis**: Compare information from multiple sources
-- **Deep Dive Analysis**: Explore topics in detail
+### **2. Multimodal RAG**
 
-### **3. Conversational RAG**
-
-#### **Flow**:
-1. **Conversation History**: Maintain context from previous interactions
-2. **Context-Aware Retrieval**: Use conversation history to improve retrieval
-3. **Dynamic Query Generation**: Generate queries based on conversation flow
-4. **Response Generation**: Generate contextually appropriate responses
-5. **Memory Update**: Update conversation memory for future interactions
-
-#### **Use Cases**:
-- **Chatbots**: Interactive information retrieval
-- **Virtual Assistants**: Context-aware help systems
-- **Customer Support**: Personalized support with memory
-
-### **4. Multi-Modal RAG**
+#### **Architecture Overview**:
+Extends RAG to handle multiple data types including text, images, audio, and video.
 
 #### **Flow**:
-1. **Multi-Modal Input**: Process text, images, audio, video
-2. **Cross-Modal Retrieval**: Find relevant information across modalities
-3. **Information Fusion**: Combine information from different modalities
-4. **Multi-Modal Generation**: Generate responses in multiple formats
+1. **Multi-Modal Input**: Process text, images, audio, video inputs
+2. **Cross-Modal Embedding**: Convert different modalities to unified vector space
+3. **Multi-Source Retrieval**: Search across text, image, and other databases
+4. **Information Fusion**: Combine information from different modalities
+5. **Context Assembly**: Create rich context with multimodal information
+6. **Multi-Modal Generation**: Generate responses incorporating multiple formats
+
+#### **Key Components**:
+- **Multi-Modal Encoders**: Separate encoders for text, images, audio, video
+- **Unified Vector Space**: Common embedding space for all modalities
+- **Cross-Modal Search**: Search across different data types
+- **Fusion Mechanisms**: Combine information from multiple modalities
+- **Multi-Modal LLM**: Models capable of understanding multiple input types
 
 #### **Use Cases**:
 - **Document Analysis**: Process documents with images and text
 - **Video Understanding**: Answer questions about video content
 - **Product Search**: Search using images and text descriptions
+- **Educational Content**: Interactive learning with multimedia
+- **Medical Diagnosis**: Analyze medical images with textual reports
+
+#### **Advantages**:
+- Rich information retrieval across modalities
+- Comprehensive understanding of complex content
+- Better user experience with multimedia
+- Handles real-world diverse data types
+
+#### **Limitations**:
+- Higher computational complexity
+- Requires specialized models for each modality
+- More complex data processing pipeline
+- Higher storage and processing costs
+
+### **3. HyDE (Hypothetical Document Embeddings)**
+
+#### **Architecture Overview**:
+Generates hypothetical responses first, then uses them to improve retrieval quality.
+
+#### **Flow**:
+1. **User Query**: Receive user question
+2. **Hypothetical Response Generation**: LLM generates hypothetical answer
+3. **Response Embedding**: Convert hypothetical response to vector
+4. **Enhanced Retrieval**: Use hypothetical response embedding for better document retrieval
+5. **Context Assembly**: Combine original query with retrieved documents
+6. **Final Generation**: Generate actual response using retrieved context
+
+#### **Key Components**:
+- **Hypothesis Generator**: LLM that creates hypothetical responses
+- **Dual Embedding**: Embed both queries and hypothetical responses
+- **Enhanced Retrieval**: Use hypothesis embeddings for better document matching
+- **Response Refinement**: Generate final response based on retrieved context
+
+#### **Use Cases**:
+- **Complex Query Answering**: When queries are ambiguous or complex
+- **Domain-Specific Search**: Technical or specialized knowledge retrieval
+- **Research Assistance**: Academic and scientific information retrieval
+- **Legal Research**: Finding relevant legal precedents and documents
+
+#### **Advantages**:
+- Improved retrieval accuracy through hypothesis generation
+- Better handling of complex and ambiguous queries
+- Enhanced semantic matching between queries and documents
+- Reduced semantic gap between questions and answers
+
+#### **Limitations**:
+- Additional computational overhead from hypothesis generation
+- Potential for hypothesis bias affecting retrieval
+- More complex pipeline with additional failure points
+- Requires careful prompt engineering for hypothesis generation
+
+### **4. Corrective RAG**
+
+#### **Architecture Overview**:
+Includes a correction mechanism that validates and improves retrieved information quality.
+
+#### **Flow**:
+1. **User Query**: Receive user question
+2. **Initial Retrieval**: Retrieve documents from knowledge base
+3. **Relevance Grading**: Grade retrieved documents for relevance and quality
+4. **Correction Decision**: Decide if additional retrieval or web search is needed
+5. **Corrective Actions**: 
+   - If inadequate: Search web for additional information
+   - If irrelevant: Filter out low-quality documents
+6. **Context Assembly**: Combine corrected information with original query
+7. **Generation**: Generate response using validated context
+
+#### **Key Components**:
+- **Relevance Grader**: Model that evaluates document relevance
+- **Quality Assessor**: System to assess information quality
+- **Web Search Integration**: Fallback to web search for additional information
+- **Information Validator**: Verify information accuracy and consistency
+- **Correction Engine**: Apply corrections and improvements
+
+#### **Use Cases**:
+- **Fact-Checking Systems**: Verify information accuracy
+- **News and Current Events**: Get up-to-date information
+- **Research Validation**: Cross-reference research findings
+- **Quality Assurance**: Ensure high-quality responses
+
+#### **Advantages**:
+- Higher accuracy through validation and correction
+- Ability to handle incomplete knowledge bases
+- Dynamic information updating through web search
+- Quality control mechanisms
+
+#### **Limitations**:
+- Increased complexity and processing time
+- Requires additional models for grading and validation
+- Potential for over-correction or false corrections
+- Higher computational and infrastructure costs
+
+### **5. Graph RAG**
+
+#### **Architecture Overview**:
+Utilizes graph structures to represent relationships between entities and concepts for enhanced retrieval.
+
+#### **Flow**:
+1. **User Query**: Receive user question
+2. **Entity Extraction**: Extract entities and concepts from query
+3. **Graph Traversal**: Navigate knowledge graph to find related information
+4. **Relationship Analysis**: Analyze connections between entities
+5. **Context Expansion**: Expand context using graph relationships
+6. **Document Retrieval**: Retrieve documents based on graph insights
+7. **Generation**: Generate response incorporating relationship information
+
+#### **Key Components**:
+- **Knowledge Graph**: Graph database storing entity relationships
+- **Entity Extraction**: NER and concept extraction models
+- **Graph Algorithms**: Traversal and relationship discovery algorithms
+- **Relationship Embeddings**: Vector representations of entity relationships
+- **Graph-Aware Retrieval**: Retrieval enhanced by graph structure
+
+#### **Use Cases**:
+- **Knowledge Base Systems**: Complex organizational knowledge
+- **Scientific Research**: Research papers with citation networks
+- **Social Network Analysis**: Understanding relationships and influences
+- **Recommendation Systems**: Content recommendation based on relationships
+- **Financial Analysis**: Company relationships and market connections
+
+#### **Advantages**:
+- Rich relationship understanding
+- Better context through connected information
+- Improved reasoning capabilities
+- Handles complex multi-hop questions
+
+#### **Limitations**:
+- Requires graph construction and maintenance
+- Higher complexity in implementation
+- Computational overhead for graph operations
+- Dependency on graph quality and completeness
+
+### **6. Hybrid RAG**
+
+#### **Architecture Overview**:
+Combines multiple RAG approaches and retrieval methods for optimal performance.
+
+#### **Flow**:
+1. **User Query**: Receive user question
+2. **Multi-Method Retrieval**: 
+   - Dense retrieval using embeddings
+   - Sparse retrieval using keywords
+   - Graph-based retrieval
+3. **Result Fusion**: Combine results from different retrieval methods
+4. **Ranking and Selection**: Rank and select best documents from combined results
+5. **Context Assembly**: Create rich context from diverse sources
+6. **Generation**: Generate response using hybrid context
+
+#### **Key Components**:
+- **Multiple Retrievers**: Dense, sparse, and graph-based retrievers
+- **Fusion Algorithms**: Combine results from different methods
+- **Ranking Models**: Advanced ranking and selection mechanisms
+- **Context Optimization**: Optimize context from multiple sources
+- **Ensemble Generation**: Multiple generation strategies
+
+#### **Use Cases**:
+- **Enterprise Search**: Comprehensive organizational knowledge retrieval
+- **Research Platforms**: Academic and scientific research assistance
+- **Customer Support**: Multi-faceted customer query handling
+- **Content Discovery**: Finding relevant content across diverse sources
+
+#### **Advantages**:
+- Best performance through method combination
+- Robust retrieval across different query types
+- Improved coverage and accuracy
+- Flexibility in handling diverse use cases
+
+#### **Limitations**:
+- High implementation complexity
+- Increased computational requirements
+- More difficult to optimize and tune
+- Higher infrastructure and maintenance costs
+
+### **7. Adaptive RAG**
+
+#### **Architecture Overview**:
+Dynamically adapts retrieval and generation strategies based on query complexity and context.
+
+#### **Flow**:
+1. **User Query**: Receive user question
+2. **Query Analysis**: Analyze query complexity and requirements
+3. **Strategy Selection**: Choose appropriate retrieval strategy
+   - Simple queries → Direct retrieval
+   - Complex queries → Multi-step reasoning
+4. **Adaptive Retrieval**: Apply selected retrieval method
+5. **Context Assessment**: Evaluate retrieved context quality
+6. **Generation Adaptation**: Adapt generation based on context and query type
+7. **Response**: Provide response with appropriate level of detail
+
+#### **Key Components**:
+- **Query Analyzer**: Classify query complexity and type
+- **Strategy Selector**: Choose optimal retrieval approach
+- **Multi-Step Reasoner**: Handle complex multi-step queries
+- **Context Evaluator**: Assess context quality and completeness
+- **Adaptive Generator**: Adjust generation strategy dynamically
+
+#### **Use Cases**:
+- **Intelligent Assistants**: Adapt to different user needs
+- **Educational Systems**: Adjust complexity based on user level
+- **Research Tools**: Handle varying research complexity
+- **Customer Support**: Adapt responses to query complexity
+
+#### **Advantages**:
+- Optimal performance for different query types
+- Efficient resource utilization
+- Better user experience through adaptation
+- Scalable across diverse use cases
+
+#### **Limitations**:
+- Complex decision-making logic
+- Requires extensive training and tuning
+- Difficult to predict and debug behavior
+- Higher development and maintenance complexity
+
+### **8. Agentic RAG**
+
+#### **Architecture Overview**:
+Utilizes multiple specialized agents working together to handle complex, multi-faceted queries.
+
+#### **Flow**:
+1. **User Query**: Receive complex user question
+2. **Query Decomposition**: Break down query into sub-tasks
+3. **Agent Assignment**: Assign sub-tasks to specialized agents:
+   - **Agent 1**: ReACT (Reasoning and Acting)
+   - **Agent 2**: CoT (Chain of Thought) Planning
+   - **Agent 3**: Specialized domain agents
+4. **Parallel Processing**: Agents work on their assigned tasks
+5. **Information Synthesis**: Combine results from all agents
+6. **Coordination**: Manage agent interactions and dependencies
+7. **Final Generation**: Generate comprehensive response
+
+#### **Key Components**:
+- **Query Decomposer**: Break complex queries into manageable parts
+- **Agent Manager**: Coordinate multiple specialized agents
+- **ReACT Agent**: Reasoning and action-taking capabilities
+- **CoT Planning Agent**: Chain-of-thought reasoning
+- **Domain Agents**: Specialized agents for specific domains
+- **Synthesis Engine**: Combine outputs from multiple agents
+- **MCP Servers**: Model Context Protocol for external data access
+- **Local Data Sources**: Direct access to local information
+- **Search Engines**: Web search capabilities
+- **Cloud Servers**: Access to cloud-based services
+
+#### **Use Cases**:
+- **Complex Research**: Multi-disciplinary research questions
+- **Business Intelligence**: Comprehensive business analysis
+- **Scientific Discovery**: Multi-step scientific investigations
+- **Strategic Planning**: Complex decision-making scenarios
+- **Educational Research**: Comprehensive learning assistance
+
+#### **Advantages**:
+- Handles highly complex, multi-faceted queries
+- Specialized expertise through domain agents
+- Parallel processing for efficiency
+- Comprehensive and thorough responses
+- Scalable agent architecture
+
+#### **Limitations**:
+- High complexity in implementation and coordination
+- Significant computational resources required
+- Complex debugging and error handling
+- Potential for agent conflicts or inconsistencies
+- Higher latency due to multi-agent coordination
+
+## Choosing the Right RAG Architecture
+
+### **Decision Framework**:
+
+#### **Query Complexity**:
+- **Simple Q&A**: Naive RAG
+- **Multi-modal Content**: Multimodal RAG
+- **Ambiguous Queries**: HyDE
+- **Quality-Critical**: Corrective RAG
+- **Relationship-Heavy**: Graph RAG
+- **Diverse Requirements**: Hybrid RAG
+- **Variable Complexity**: Adaptive RAG
+- **Highly Complex**: Agentic RAG
+
+#### **Data Characteristics**:
+- **Text-Only**: Naive RAG, HyDE, Corrective RAG
+- **Multi-Modal**: Multimodal RAG
+- **Structured Relationships**: Graph RAG
+- **Mixed Data Types**: Hybrid RAG, Agentic RAG
+
+#### **Performance Requirements**:
+- **Low Latency**: Naive RAG
+- **High Accuracy**: Corrective RAG, Hybrid RAG
+- **Comprehensive Coverage**: Agentic RAG
+- **Balanced Performance**: Adaptive RAG
+
+#### **Resource Constraints**:
+- **Limited Resources**: Naive RAG
+- **Moderate Resources**: HyDE, Corrective RAG
+- **High Resources**: Graph RAG, Hybrid RAG, Agentic RAG
+
+### **Implementation Considerations**:
+
+#### **Development Complexity**:
+- **Beginner**: Start with Naive RAG
+- **Intermediate**: HyDE, Corrective RAG, Multimodal RAG
+- **Advanced**: Graph RAG, Hybrid RAG, Adaptive RAG, Agentic RAG
+
+#### **Maintenance Requirements**:
+- **Low Maintenance**: Naive RAG
+- **Moderate Maintenance**: HyDE, Multimodal RAG
+- **High Maintenance**: Graph RAG, Adaptive RAG, Agentic RAG
+
+#### **Scalability Needs**:
+- **Small Scale**: Naive RAG, HyDE
+- **Medium Scale**: Corrective RAG, Multimodal RAG
+- **Large Scale**: Hybrid RAG, Adaptive RAG, Agentic RAG
 
 ## Advanced RAG Techniques
 
