@@ -485,6 +485,106 @@ points = [(1, 2), (3, 4), (5, 6), (7, 8)]
 - **Real-world analogy**: Like organizing celestial bodies by their distance from the sun
 - **Example**: Inner sphere contains closest vectors, outer sphere contains more distant ones
 
+#### **R-Trees vs Ball Trees - Detailed Comparison**
+
+**R-Trees (Rectangle Trees)**:
+
+**What they are**: Hierarchical data structures that organize data using **rectangular bounding boxes** (like organizing items in storage boxes).
+
+**How they work**:
+- **Rectangular Regions**: Each node contains a rectangle that bounds all its children
+- **Nested Rectangles**: Larger rectangles contain smaller rectangles
+- **Splitting Strategy**: When a node gets full, it splits along one dimension to create two rectangles
+
+**Real-world analogy**: Like organizing a warehouse with boxes inside bigger boxes - each box has a rectangular boundary.
+
+**Example**:
+```
+Level 1: [Large Rectangle containing everything]
+Level 2: [Box A: x=0-50, y=0-50] [Box B: x=50-100, y=0-50]
+Level 3: [Box A1: x=0-25, y=0-25] [Box A2: x=25-50, y=0-25]
+```
+
+**Best for**:
+- ✅ **Geographic data** (coordinates, addresses)
+- ✅ **Spatial queries** (find all points in a rectangular region)
+- ✅ **2D/3D data** with clear boundaries
+- ✅ **Range queries** (find everything within a box)
+
+**Ball Trees (Spherical Trees)**:
+
+**What they are**: Hierarchical data structures that organize data using **spherical regions** (like organizing planets by solar systems).
+
+**How they work**:
+- **Spherical Regions**: Each node contains a sphere that bounds all its children
+- **Nested Spheres**: Larger spheres contain smaller spheres
+- **Distance-based Splitting**: Splits based on distance from center points
+
+**Real-world analogy**: Like organizing celestial bodies by their distance from the sun - each has a spherical boundary.
+
+**Example**:
+```
+Level 1: [Large Sphere containing everything]
+Level 2: [Inner Sphere: radius=10] [Outer Sphere: radius=20]
+Level 3: [Inner-Inner: radius=5] [Inner-Outer: radius=10]
+```
+
+**Best for**:
+- ✅ **Distance-based queries** (find all points within X distance)
+- ✅ **High-dimensional data** (works better than R-trees in high dimensions)
+- ✅ **Similarity search** (find similar vectors)
+- ✅ **Clustering applications**
+
+**Key Technical Differences**:
+
+| Aspect | R-Trees | Ball Trees |
+|--------|---------|------------|
+| **Shape** | Rectangular bounding boxes | Spherical bounding regions |
+| **Splitting** | Dimension-based (split by X, then Y) | Distance-based (split by radius) |
+| **Query Type** | Range queries, rectangular regions | Distance queries, similarity search |
+| **Dimensions** | Better for 2D-3D | Better for high-dimensional data |
+| **Overlap** | Can have overlapping rectangles | Minimal overlap between spheres |
+| **Complexity** | O(log n) for range queries | O(log n) for distance queries |
+
+**When to Use Each**:
+
+**Use R-Trees when**:
+- Working with **geographic/spatial data**
+- Need **rectangular range queries** ("find all houses in this area")
+- Data has **clear dimensional boundaries**
+- Working with **2D or 3D coordinates**
+
+**Use Ball Trees when**:
+- Working with **high-dimensional vectors**
+- Need **distance-based queries** ("find all similar items")
+- Data is **spherical in nature** (like embeddings)
+- Building **similarity search systems**
+
+**Performance Comparison**:
+
+**R-Trees**:
+- ✅ Fast for rectangular range queries
+- ✅ Good for low-dimensional spatial data
+- ❌ Suffer from curse of dimensionality
+- ❌ Poor performance in high dimensions
+
+**Ball Trees**:
+- ✅ Better for high-dimensional data
+- ✅ Excellent for distance-based queries
+- ✅ More efficient memory usage
+- ❌ More complex to implement
+- ❌ Slower for rectangular range queries
+
+**Real-World Examples**:
+
+**R-Tree use case**: "Find all restaurants within this city block"
+- Query: Rectangular area with specific coordinates
+- R-Tree can quickly eliminate restaurants outside the rectangle
+
+**Ball Tree use case**: "Find all products similar to this one"
+- Query: Find items within a certain similarity distance
+- Ball Tree can efficiently search the spherical similarity space
+
 **Tree-Based Advantages & Disadvantages**:
 - ✅ **Good for**: Low-dimensional data (< 100 dimensions), exact search
 - ✅ **Fast**: O(log n) search time
